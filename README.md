@@ -52,8 +52,8 @@ Cada linha é uma partida, com os campos separados por ponto e vírgula:
 
 ```
 # rodada;filme A;votos A;votos B;filme B
-1;Aurora;0;0;Vagalume
-1;Bruma;2;1;Travessia
+1;Ainda Estou Aqui;0;0;Vitória
+1;Como Eu Era Antes de Você;2;1;Toy Story 3
 ```
 
 Linhas em branco e linhas que começam com `#` são ignoradas.

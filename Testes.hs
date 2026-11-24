@@ -303,25 +303,25 @@ dadosCampeonato :: String
 dadosCampeonato =
   unlines
     [ "# rodada;filme A;votos A;votos B;filme B"
-    , "1;Aurora;0;0;Vagalume"          -- empate em 0 x 0
-    , "1;Bruma;2;1;Travessia"
-    , "1;Horizonte;4;0;Maré"           -- vitória por 4 de diferença
+    , "1;Ainda Estou Aqui;0;0;Vitória"          -- empate em 0 x 0
+    , "1;Como Eu Era Antes de Você;2;1;Toy Story 3"
+    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"           -- vitória por 4 de diferença
     , ""
-    , "2;Aurora;2;0;Travessia"
-    , "2;Vagalume;1;1;Maré"
-    , "2;Bruma;0;1;Horizonte"
+    , "2;Ainda Estou Aqui;2;0;Toy Story 3"
+    , "2;Vitória;1;1;Bastardos Inglórios"
+    , "2;Como Eu Era Antes de Você;0;1;Sonho de Liberdade"
     , ""
-    , "3;Aurora;1;0;Maré"
-    , "3;Travessia;2;1;Horizonte"
-    , "3;Vagalume;0;2;Bruma"
+    , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
+    , "3;Toy Story 3;2;1;Sonho de Liberdade"
+    , "3;Vitória;0;2;Como Eu Era Antes de Você"
     , ""
-    , "4;Aurora;2;1;Horizonte"
-    , "4;Maré;1;0;Bruma"
-    , "4;Travessia;2;0;Vagalume"
+    , "4;Ainda Estou Aqui;2;1;Sonho de Liberdade"
+    , "4;Bastardos Inglórios;1;0;Como Eu Era Antes de Você"
+    , "4;Toy Story 3;2;0;Vitória"
     , ""
-    , "5;Aurora;1;2;Bruma"
-    , "5;Horizonte;3;0;Vagalume"
-    , "5;Maré;1;2;Travessia"
+    , "5;Ainda Estou Aqui;1;2;Como Eu Era Antes de Você"
+    , "5;Sonho de Liberdade;3;0;Vitória"
+    , "5;Bastardos Inglórios;1;2;Toy Story 3"
     ]
 
 -- Uma linha inválida para cada construtor de Erro.
@@ -329,12 +329,12 @@ dadosComErros :: String
 dadosComErros =
   unlines
     [ "# entrada com erros de digitação"
-    , "1;Aurora;dois;0;Vagalume"       -- linha 2: NumeroInvalido
-    , "1;Bruma;-2;1;Maré"              -- linha 3: PlacarNegativo
-    , "2;Horizonte;1;1;Horizonte"      -- linha 4: MesmoFilme
-    , "2;Travessia;3;Aurora"           -- linha 5: CamposInvalidos
-    , "3;Aurora;1;0;Maré"
-    , "3;Bruma;2;2;Aurora"             -- Aurora duas vezes na rodada 3
+    , "1;Ainda Estou Aqui;dois;0;Vitória"       -- linha 2: NumeroInvalido
+    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"              -- linha 3: PlacarNegativo
+    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"      -- linha 4: MesmoFilme
+    , "2;Toy Story 3;3;Ainda Estou Aqui"           -- linha 5: CamposInvalidos
+    , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
+    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"             -- Ainda Estou Aqui duas vezes na rodada 3
     ]
 
 -- =====================================================================
@@ -356,27 +356,27 @@ campeonato :: [Partida]
 campeonato = either (const []) id (lerCampeonato dadosCampeonato)
 
 exemplo :: Partida
-exemplo = Partida 1 "Horizonte" 4 0 "Maré"
+exemplo = Partida 1 "Sonho de Liberdade" 4 0 "Bastardos Inglórios"
 
 -- Tabelas conferidas à mão (ver docs/decisoes.md).
 tabelaFinal :: [Linha]
 tabelaFinal =
-  [ Linha "Aurora"    5 3 1 1  6 3
-  , Linha "Horizonte" 5 3 0 2 10 4
-  , Linha "Bruma"     5 3 0 2  6 4
-  , Linha "Travessia" 5 3 0 2  7 6
-  , Linha "Maré"      5 1 1 3  3 8
-  , Linha "Vagalume"  5 0 2 3  1 8
+  [ Linha "Ainda Estou Aqui"    5 3 1 1  6 3
+  , Linha "Sonho de Liberdade" 5 3 0 2 10 4
+  , Linha "Como Eu Era Antes de Você"     5 3 0 2  6 4
+  , Linha "Toy Story 3" 5 3 0 2  7 6
+  , Linha "Bastardos Inglórios"      5 1 1 3  3 8
+  , Linha "Vitória"  5 0 2 3  1 8
   ]
 
 tabelaRodada3 :: [Linha]
 tabelaRodada3 =
-  [ Linha "Aurora"    3 2 1 0 3 0
-  , Linha "Horizonte" 3 2 0 1 6 2
-  , Linha "Bruma"     3 2 0 1 4 2
-  , Linha "Travessia" 3 1 0 2 3 5
-  , Linha "Vagalume"  3 0 2 1 1 3
-  , Linha "Maré"      3 0 1 2 1 6
+  [ Linha "Ainda Estou Aqui"    3 2 1 0 3 0
+  , Linha "Sonho de Liberdade" 3 2 0 1 6 2
+  , Linha "Como Eu Era Antes de Você"     3 2 0 1 4 2
+  , Linha "Toy Story 3" 3 1 0 2 3 5
+  , Linha "Vitória"  3 0 2 1 1 3
+  , Linha "Bastardos Inglórios"      3 0 1 2 1 6
   ]
 
 -- Três filmes com 3 pontos, 1 vitória e saldo +1. Alvorada fica em último
@@ -395,13 +395,13 @@ soAlfabetica = [Partida 1 "Zênite" 1 1 "Brisa"]
 
 testesCamada1 :: [IO Bool]
 testesCamada1 =
-  [ testar "resultadoPara filme A (mandante)" (resultadoPara "Horizonte" exemplo) (Just Vitoria)
-  , testar "resultadoPara filme B (visitante)" (resultadoPara "Maré" exemplo) (Just Derrota)
-  , testar "resultadoPara filme que não jogou" (resultadoPara "Aurora" exemplo) Nothing
-  , testar "resultadoPara empate" (resultadoPara "Aurora" (Partida 1 "Aurora" 0 0 "Vagalume")) (Just Empate)
-  , testar "participou" (map (`participou` exemplo) ["Horizonte", "Maré", "Aurora"]) [True, True, False]
+  [ testar "resultadoPara filme A (mandante)" (resultadoPara "Sonho de Liberdade" exemplo) (Just Vitoria)
+  , testar "resultadoPara filme B (visitante)" (resultadoPara "Bastardos Inglórios" exemplo) (Just Derrota)
+  , testar "resultadoPara filme que não jogou" (resultadoPara "Ainda Estou Aqui" exemplo) Nothing
+  , testar "resultadoPara empate" (resultadoPara "Ainda Estou Aqui" (Partida 1 "Ainda Estou Aqui" 0 0 "Vitória")) (Just Empate)
+  , testar "participou" (map (`participou` exemplo) ["Sonho de Liberdade", "Bastardos Inglórios", "Ainda Estou Aqui"]) [True, True, False]
   , testar "filmes sem repetição e em ordem"
-      (filmes campeonato) ["Aurora", "Bruma", "Horizonte", "Maré", "Travessia", "Vagalume"]
+      (filmes campeonato) ["Ainda Estou Aqui", "Bastardos Inglórios", "Como Eu Era Antes de Você", "Sonho de Liberdade", "Toy Story 3", "Vitória"]
   , testar "filmes de lista vazia" (filmes []) []
   , testar "campeonato de teste com 15 campeonato" (length campeonato) 15
   ]
@@ -409,14 +409,14 @@ testesCamada1 =
 testesCamada2 :: [IO Bool]
 testesCamada2 =
   [ testar "pontos" (map pontos [Vitoria, Empate, Derrota]) [3, 1, 0]
-  , testar "linhaDoFilme Aurora" (linhaDoFilme campeonato "Aurora") (Linha "Aurora" 5 3 1 1 6 3)
+  , testar "linhaDoFilme Ainda Estou Aqui" (linhaDoFilme campeonato "Ainda Estou Aqui") (Linha "Ainda Estou Aqui" 5 3 1 1 6 3)
   , testar "linhaDoFilme de quem não jogou" (linhaDoFilme campeonato "Oppenheimer") (Linha "Oppenheimer" 0 0 0 0 0 0)
-  , testar "pontosLinha e saldo de Horizonte"
-      (let l = linhaDoFilme campeonato "Horizonte" in (pontosLinha l, saldo l)) (9, 6)
+  , testar "pontosLinha e saldo de Sonho de Liberdade"
+      (let l = linhaDoFilme campeonato "Sonho de Liberdade" in (pontosLinha l, saldo l)) (9, 6)
   , testar "classificação final (conferida à mão)" (classificacao campeonato) tabelaFinal
   , testar "empate em 9 pontos e 3 vitórias decidido pelo saldo"
       [(filme l, saldo l) | l <- classificacao campeonato, pontosLinha l == 9]
-      [("Horizonte", 6), ("Bruma", 2), ("Travessia", 1)]
+      [("Sonho de Liberdade", 6), ("Como Eu Era Antes de Você", 2), ("Toy Story 3", 1)]
   , testar "empate em pontos, vitórias e saldo: votos pró e depois alfabética"
       (map filme (filter ((== 3) . pontosLinha) (classificacao desempate)))
       ["Cedro", "Lume", "Alvorada"]
@@ -430,47 +430,47 @@ testesCamada2 =
   , testar "maiorDiferenca [] é Nothing" (maiorDiferenca []) Nothing
   , testar "mediaVotos [] é Nothing" (mediaVotos []) Nothing
   , testar "classificacao [] é vazia" (classificacao []) []
-  , testar "aproveitamento sem jogos é 0" (aproveitamento (linhaDoFilme [] "Aurora")) 0
-  , testar "aproveitamento de 50%" (aproveitamento (Linha "Aurora" 2 1 0 1 2 2)) 50
+  , testar "aproveitamento sem jogos é 0" (aproveitamento (linhaDoFilme [] "Ainda Estou Aqui")) 0
+  , testar "aproveitamento de 50%" (aproveitamento (Linha "Ainda Estou Aqui" 2 1 0 1 2 2)) 50
   ]
 
 testesCamada3 :: [IO Bool]
 testesCamada3 =
   [ testar "separar" (separar ';' "1;A;2;;B") ["1", "A", "2", "", "B"]
   , testar "separar texto vazio" (separar ';' "") [""]
-  , testar "lerPartida válida" (lerPartida 1 "1;Horizonte;4;0;Maré") (Right exemplo)
-  , testar "lerPartida ignora espaços nas pontas" (lerPartida 1 " 1 ; Horizonte ; 4 ; 0 ; Maré ") (Right exemplo)
+  , testar "lerPartida válida" (lerPartida 1 "1;Sonho de Liberdade;4;0;Bastardos Inglórios") (Right exemplo)
+  , testar "lerPartida ignora espaços nas pontas" (lerPartida 1 " 1 ; Sonho de Liberdade ; 4 ; 0 ; Bastardos Inglórios ") (Right exemplo)
   , testar "lerCampeonato válido devolve Right" (fmap length (lerCampeonato dadosCampeonato)) (Right 15)
   , testar "campeonato vazio (só comentários)" (lerCampeonato "\n# nada\n   \n") (Right [])
-  , testar "CamposInvalidos (4 campos)" (lerPartida 7 "1;Aurora;0;Maré") (Left (CamposInvalidos 7))
-  , testar "CamposInvalidos (título vazio)" (lerPartida 7 "1;Aurora;0;0;  ") (Left (CamposInvalidos 7))
-  , testar "NumeroInvalido (placar \"dois\")" (lerPartida 2 "1;Aurora;dois;0;Maré")
+  , testar "CamposInvalidos (4 campos)" (lerPartida 7 "1;Ainda Estou Aqui;0;Bastardos Inglórios") (Left (CamposInvalidos 7))
+  , testar "CamposInvalidos (título vazio)" (lerPartida 7 "1;Ainda Estou Aqui;0;0;  ") (Left (CamposInvalidos 7))
+  , testar "NumeroInvalido (placar \"dois\")" (lerPartida 2 "1;Ainda Estou Aqui;dois;0;Bastardos Inglórios")
       (Left (NumeroInvalido 2 "votos do filme A"))
-  , testar "NumeroInvalido (\"2a\")" (lerPartida 2 "1;Aurora;0;2a;Maré")
+  , testar "NumeroInvalido (\"2a\")" (lerPartida 2 "1;Ainda Estou Aqui;0;2a;Bastardos Inglórios")
       (Left (NumeroInvalido 2 "votos do filme B"))
-  , testar "NumeroInvalido (rodada 0)" (lerPartida 2 "0;Aurora;1;0;Maré")
+  , testar "NumeroInvalido (rodada 0)" (lerPartida 2 "0;Ainda Estou Aqui;1;0;Bastardos Inglórios")
       (Left (NumeroInvalido 2 "rodada"))
-  , testar "NumeroInvalido (acima do limite de Int)" (lerPartida 2 "1;Aurora;99999999999999999999;0;Maré")
+  , testar "NumeroInvalido (acima do limite de Int)" (lerPartida 2 "1;Ainda Estou Aqui;99999999999999999999;0;Bastardos Inglórios")
       (Left (NumeroInvalido 2 "votos do filme A"))
-  , testar "PlacarNegativo" (lerPartida 3 "1;Bruma;-1;0;Maré") (Left (PlacarNegativo 3))
-  , testar "MesmoFilme" (lerPartida 4 "1;Maré;1;0;Maré") (Left (MesmoFilme 4))
+  , testar "PlacarNegativo" (lerPartida 3 "1;Como Eu Era Antes de Você;-1;0;Bastardos Inglórios") (Left (PlacarNegativo 3))
+  , testar "MesmoFilme" (lerPartida 4 "1;Bastardos Inglórios;1;0;Bastardos Inglórios") (Left (MesmoFilme 4))
   , testar "FilmeRepetidoNaRodada"
-      (lerCampeonato (unlines ["1;Aurora;2;0;Maré", "1;Bruma;1;1;Aurora"]))
-      (Left (FilmeRepetidoNaRodada 1 "Aurora"))
+      (lerCampeonato (unlines ["1;Ainda Estou Aqui;2;0;Bastardos Inglórios", "1;Como Eu Era Antes de Você;1;1;Ainda Estou Aqui"]))
+      (Left (FilmeRepetidoNaRodada 1 "Ainda Estou Aqui"))
   , testar "mesmo filme em rodadas diferentes é válido"
-      (fmap length (lerCampeonato (unlines ["1;Aurora;2;0;Maré", "2;Bruma;1;1;Aurora"]))) (Right 2)
+      (fmap length (lerCampeonato (unlines ["1;Ainda Estou Aqui;2;0;Bastardos Inglórios", "2;Como Eu Era Antes de Você;1;1;Ainda Estou Aqui"]))) (Right 2)
   , testar "lerCampeonato para no primeiro erro (número da linha original)"
       (lerCampeonato dadosComErros) (Left (NumeroInvalido 2 "votos do filme A"))
   , testar "todosOsErros lista todos"
       (todosOsErros dadosComErros)
       [ NumeroInvalido 2 "votos do filme A", PlacarNegativo 3, MesmoFilme 4
-      , CamposInvalidos 5, FilmeRepetidoNaRodada 3 "Aurora" ]
+      , CamposInvalidos 5, FilmeRepetidoNaRodada 3 "Ainda Estou Aqui" ]
   , testar "todosOsErros de entrada válida é vazio" (todosOsErros dadosCampeonato) []
   , testar "mensagemErro indica a linha" (mensagemErro (PlacarNegativo 3))
       "Linha 3: os votos não podem ser negativos."
-  , testar "mensagemErro indica a rodada" (mensagemErro (FilmeRepetidoNaRodada 3 "Aurora"))
-      "Rodada 3: Aurora aparece em mais de uma partida."
-  , testar "partidaFormatada" (partidaFormatada exemplo) "Rodada 1: Horizonte 4 x 0 Maré"
+  , testar "mensagemErro indica a rodada" (mensagemErro (FilmeRepetidoNaRodada 3 "Ainda Estou Aqui"))
+      "Rodada 3: Ainda Estou Aqui aparece em mais de uma partida."
+  , testar "partidaFormatada" (partidaFormatada exemplo) "Rodada 1: Sonho de Liberdade 4 x 0 Bastardos Inglórios"
   , testar "tabelaFormatada vazia" (tabelaFormatada []) "Nenhuma partida registrada.\n"
   , testar "tabelaFormatada tem cabeçalho e 6 linhas"
       (length (lines (tabelaFormatada (classificacao campeonato)))) 7

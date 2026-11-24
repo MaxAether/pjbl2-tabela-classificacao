@@ -302,25 +302,25 @@ dadosCampeonato :: String
 dadosCampeonato =
   unlines
     [ "# rodada;filme A;votos A;votos B;filme B"
-    , "1;Aurora;0;0;Vagalume"          -- empate em 0 x 0
-    , "1;Bruma;2;1;Travessia"
-    , "1;Horizonte;4;0;Maré"           -- vitória por 4 de diferença
+    , "1;Ainda Estou Aqui;0;0;Vitória"          -- empate em 0 x 0
+    , "1;Como Eu Era Antes de Você;2;1;Toy Story 3"
+    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"           -- vitória por 4 de diferença
     , ""
-    , "2;Aurora;2;0;Travessia"
-    , "2;Vagalume;1;1;Maré"
-    , "2;Bruma;0;1;Horizonte"
+    , "2;Ainda Estou Aqui;2;0;Toy Story 3"
+    , "2;Vitória;1;1;Bastardos Inglórios"
+    , "2;Como Eu Era Antes de Você;0;1;Sonho de Liberdade"
     , ""
-    , "3;Aurora;1;0;Maré"
-    , "3;Travessia;2;1;Horizonte"
-    , "3;Vagalume;0;2;Bruma"
+    , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
+    , "3;Toy Story 3;2;1;Sonho de Liberdade"
+    , "3;Vitória;0;2;Como Eu Era Antes de Você"
     , ""
-    , "4;Aurora;2;1;Horizonte"
-    , "4;Maré;1;0;Bruma"
-    , "4;Travessia;2;0;Vagalume"
+    , "4;Ainda Estou Aqui;2;1;Sonho de Liberdade"
+    , "4;Bastardos Inglórios;1;0;Como Eu Era Antes de Você"
+    , "4;Toy Story 3;2;0;Vitória"
     , ""
-    , "5;Aurora;1;2;Bruma"
-    , "5;Horizonte;3;0;Vagalume"
-    , "5;Maré;1;2;Travessia"
+    , "5;Ainda Estou Aqui;1;2;Como Eu Era Antes de Você"
+    , "5;Sonho de Liberdade;3;0;Vitória"
+    , "5;Bastardos Inglórios;1;2;Toy Story 3"
     ]
 
 -- Uma linha inválida para cada construtor de Erro.
@@ -328,12 +328,12 @@ dadosComErros :: String
 dadosComErros =
   unlines
     [ "# entrada com erros de digitação"
-    , "1;Aurora;dois;0;Vagalume"       -- linha 2: NumeroInvalido
-    , "1;Bruma;-2;1;Maré"              -- linha 3: PlacarNegativo
-    , "2;Horizonte;1;1;Horizonte"      -- linha 4: MesmoFilme
-    , "2;Travessia;3;Aurora"           -- linha 5: CamposInvalidos
-    , "3;Aurora;1;0;Maré"
-    , "3;Bruma;2;2;Aurora"             -- Aurora duas vezes na rodada 3
+    , "1;Ainda Estou Aqui;dois;0;Vitória"       -- linha 2: NumeroInvalido
+    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"              -- linha 3: PlacarNegativo
+    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"      -- linha 4: MesmoFilme
+    , "2;Toy Story 3;3;Ainda Estou Aqui"           -- linha 5: CamposInvalidos
+    , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
+    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"             -- Ainda Estou Aqui duas vezes na rodada 3
     ]
 
 -- =====================================================================

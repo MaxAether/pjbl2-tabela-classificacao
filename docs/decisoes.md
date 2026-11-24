@@ -106,11 +106,11 @@ Na ordem, inspirados no Campeonato Brasileiro:
 
 | Construtor | Carrega | Exemplo |
 | --- | --- | --- |
-| `CamposInvalidos` | linha | `1;Aurora;0;Maré` (4 campos) ou título vazio |
+| `CamposInvalidos` | linha | `1;Ainda Estou Aqui;0;Bastardos Inglórios` (4 campos) ou título vazio |
 | `NumeroInvalido` | linha e campo | `dois`, `2a`, rodada `0` |
-| `PlacarNegativo` | linha | `1;Bruma;-2;1;Maré` |
-| `MesmoFilme` | linha | `2;Horizonte;1;1;Horizonte` |
-| `FilmeRepetidoNaRodada` | rodada e filme | Aurora em duas partidas da rodada 3 |
+| `PlacarNegativo` | linha | `1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios` |
+| `MesmoFilme` | linha | `2;Sonho de Liberdade;1;1;Sonho de Liberdade` |
+| `FilmeRepetidoNaRodada` | rodada e filme | Ainda Estou Aqui em duas partidas da rodada 3 |
 
 ## Tabelas conferidas à mão
 
@@ -118,27 +118,27 @@ Na ordem, inspirados no Campeonato Brasileiro:
 
 | Pos. | Filme | Pts | J | V | E | D | Pró | Contra | Saldo |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | Aurora | 7 | 3 | 2 | 1 | 0 | 3 | 0 | +3 |
-| 2 | Horizonte | 6 | 3 | 2 | 0 | 1 | 6 | 2 | +4 |
-| 3 | Bruma | 6 | 3 | 2 | 0 | 1 | 4 | 2 | +2 |
-| 4 | Travessia | 3 | 3 | 1 | 0 | 2 | 3 | 5 | −2 |
-| 5 | Vagalume | 2 | 3 | 0 | 2 | 1 | 1 | 3 | −2 |
-| 6 | Maré | 1 | 3 | 0 | 1 | 2 | 1 | 6 | −5 |
+| 1 | Ainda Estou Aqui | 7 | 3 | 2 | 1 | 0 | 3 | 0 | +3 |
+| 2 | Sonho de Liberdade | 6 | 3 | 2 | 0 | 1 | 6 | 2 | +4 |
+| 3 | Como Eu Era Antes de Você | 6 | 3 | 2 | 0 | 1 | 4 | 2 | +2 |
+| 4 | Toy Story 3 | 3 | 3 | 1 | 0 | 2 | 3 | 5 | −2 |
+| 5 | Vitória | 2 | 3 | 0 | 2 | 1 | 1 | 3 | −2 |
+| 6 | Bastardos Inglórios | 1 | 3 | 0 | 1 | 2 | 1 | 6 | −5 |
 
 ### Classificação final
 
 | Pos. | Filme | Pts | J | V | E | D | Pró | Contra | Saldo |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | Aurora | 10 | 5 | 3 | 1 | 1 | 6 | 3 | +3 |
-| 2 | Horizonte | 9 | 5 | 3 | 0 | 2 | 10 | 4 | +6 |
-| 3 | Bruma | 9 | 5 | 3 | 0 | 2 | 6 | 4 | +2 |
-| 4 | Travessia | 9 | 5 | 3 | 0 | 2 | 7 | 6 | +1 |
-| 5 | Maré | 4 | 5 | 1 | 1 | 3 | 3 | 8 | −5 |
-| 6 | Vagalume | 2 | 5 | 0 | 2 | 3 | 1 | 8 | −7 |
+| 1 | Ainda Estou Aqui | 10 | 5 | 3 | 1 | 1 | 6 | 3 | +3 |
+| 2 | Sonho de Liberdade | 9 | 5 | 3 | 0 | 2 | 10 | 4 | +6 |
+| 3 | Como Eu Era Antes de Você | 9 | 5 | 3 | 0 | 2 | 6 | 4 | +2 |
+| 4 | Toy Story 3 | 9 | 5 | 3 | 0 | 2 | 7 | 6 | +1 |
+| 5 | Bastardos Inglórios | 4 | 5 | 1 | 1 | 3 | 3 | 8 | −5 |
+| 6 | Vitória | 2 | 5 | 0 | 2 | 3 | 1 | 8 | −7 |
 
-- Horizonte, Bruma e Travessia terminam com 9 pontos e 3 vitórias: **o saldo decide**.
-- Maré passa Vagalume entre a 3ª e a 5ª rodada (a tabela intermediária é diferente da final).
-- Empate em 0 x 0: Aurora x Vagalume (rodada 1). Vitória por 3 ou mais: Horizonte 4 x 0 Maré (rodada 1).
+- Sonho de Liberdade, Como Eu Era Antes de Você e Toy Story 3 terminam com 9 pontos e 3 vitórias: **o saldo decide**.
+- Bastardos Inglórios passa Vitória entre a 3ª e a 5ª rodada (a tabela intermediária é diferente da final).
+- Empate em 0 x 0: Ainda Estou Aqui x Vitória (rodada 1). Vitória por 3 ou mais: Sonho de Liberdade 4 x 0 Bastardos Inglórios (rodada 1).
 - Média: 33 votos em 15 partidas = 2,2 votos por partida.
 
 ## Armadilhas do enunciado (seção 4) e como foram evitadas
@@ -159,7 +159,7 @@ Na ordem, inspirados no Campeonato Brasileiro:
 ## Limitações conhecidas
 
 - Títulos são comparados exatamente como escritos (após tirar espaços nas pontas):
-  `"Aurora"` e `"aurora"` contam como filmes diferentes.
+  `"Ainda Estou Aqui"` e `"aurora"` contam como filmes diferentes.
 - O `;` é o separador, então não pode fazer parte de um título.
 - A ordem alfabética usa a ordem padrão de `String` do Haskell (por código de
   caractere), então letras acentuadas maiúsculas podem não ficar onde o português
