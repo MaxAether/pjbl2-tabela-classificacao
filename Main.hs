@@ -302,9 +302,9 @@ dadosCampeonato :: String
 dadosCampeonato =
   unlines
     [ "# rodada;filme A;votos A;votos B;filme B"
-    , "1;Ainda Estou Aqui;0;0;Vitória"          -- empate em 0 x 0
+    , "1;Ainda Estou Aqui;0;0;Vitória"                       -- empate em 0 x 0
     , "1;Como Eu Era Antes de Você;2;1;Toy Story 3"
-    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"           -- vitória por 4 de diferença
+    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"         -- vitória por 4 de diferença
     , ""
     , "2;Ainda Estou Aqui;2;0;Toy Story 3"
     , "2;Vitória;1;1;Bastardos Inglórios"
@@ -328,12 +328,12 @@ dadosComErros :: String
 dadosComErros =
   unlines
     [ "# entrada com erros de digitação"
-    , "1;Ainda Estou Aqui;dois;0;Vitória"       -- linha 2: NumeroInvalido
-    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"              -- linha 3: PlacarNegativo
-    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"      -- linha 4: MesmoFilme
-    , "2;Toy Story 3;3;Ainda Estou Aqui"           -- linha 5: CamposInvalidos
+    , "1;Ainda Estou Aqui;dois;0;Vitória"                     -- linha 2: NumeroInvalido
+    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"  -- linha 3: PlacarNegativo
+    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"           -- linha 4: MesmoFilme
+    , "2;Toy Story 3;3;Ainda Estou Aqui"                      -- linha 5: CamposInvalidos
     , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
-    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"             -- Ainda Estou Aqui duas vezes na rodada 3
+    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"      -- Ainda Estou Aqui duas vezes na rodada 3
     ]
 
 -- =====================================================================

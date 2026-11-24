@@ -303,9 +303,9 @@ dadosCampeonato :: String
 dadosCampeonato =
   unlines
     [ "# rodada;filme A;votos A;votos B;filme B"
-    , "1;Ainda Estou Aqui;0;0;Vitória"          -- empate em 0 x 0
+    , "1;Ainda Estou Aqui;0;0;Vitória"                       -- empate em 0 x 0
     , "1;Como Eu Era Antes de Você;2;1;Toy Story 3"
-    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"           -- vitória por 4 de diferença
+    , "1;Sonho de Liberdade;4;0;Bastardos Inglórios"         -- vitória por 4 de diferença
     , ""
     , "2;Ainda Estou Aqui;2;0;Toy Story 3"
     , "2;Vitória;1;1;Bastardos Inglórios"
@@ -329,12 +329,12 @@ dadosComErros :: String
 dadosComErros =
   unlines
     [ "# entrada com erros de digitação"
-    , "1;Ainda Estou Aqui;dois;0;Vitória"       -- linha 2: NumeroInvalido
-    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"              -- linha 3: PlacarNegativo
-    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"      -- linha 4: MesmoFilme
-    , "2;Toy Story 3;3;Ainda Estou Aqui"           -- linha 5: CamposInvalidos
+    , "1;Ainda Estou Aqui;dois;0;Vitória"                     -- linha 2: NumeroInvalido
+    , "1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios"  -- linha 3: PlacarNegativo
+    , "2;Sonho de Liberdade;1;1;Sonho de Liberdade"           -- linha 4: MesmoFilme
+    , "2;Toy Story 3;3;Ainda Estou Aqui"                      -- linha 5: CamposInvalidos
     , "3;Ainda Estou Aqui;1;0;Bastardos Inglórios"
-    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"             -- Ainda Estou Aqui duas vezes na rodada 3
+    , "3;Como Eu Era Antes de Você;2;2;Ainda Estou Aqui"      -- Ainda Estou Aqui duas vezes na rodada 3
     ]
 
 -- =====================================================================
@@ -361,22 +361,22 @@ exemplo = Partida 1 "Sonho de Liberdade" 4 0 "Bastardos Inglórios"
 -- Tabelas conferidas à mão (ver docs/decisoes.md).
 tabelaFinal :: [Linha]
 tabelaFinal =
-  [ Linha "Ainda Estou Aqui"    5 3 1 1  6 3
-  , Linha "Sonho de Liberdade" 5 3 0 2 10 4
-  , Linha "Como Eu Era Antes de Você"     5 3 0 2  6 4
-  , Linha "Toy Story 3" 5 3 0 2  7 6
-  , Linha "Bastardos Inglórios"      5 1 1 3  3 8
-  , Linha "Vitória"  5 0 2 3  1 8
+  [ Linha "Ainda Estou Aqui"          5 3 1 1  6 3
+  , Linha "Sonho de Liberdade"        5 3 0 2 10 4
+  , Linha "Como Eu Era Antes de Você" 5 3 0 2  6 4
+  , Linha "Toy Story 3"               5 3 0 2  7 6
+  , Linha "Bastardos Inglórios"       5 1 1 3  3 8
+  , Linha "Vitória"                   5 0 2 3  1 8
   ]
 
 tabelaRodada3 :: [Linha]
 tabelaRodada3 =
-  [ Linha "Ainda Estou Aqui"    3 2 1 0 3 0
-  , Linha "Sonho de Liberdade" 3 2 0 1 6 2
-  , Linha "Como Eu Era Antes de Você"     3 2 0 1 4 2
-  , Linha "Toy Story 3" 3 1 0 2 3 5
-  , Linha "Vitória"  3 0 2 1 1 3
-  , Linha "Bastardos Inglórios"      3 0 1 2 1 6
+  [ Linha "Ainda Estou Aqui"          3 2 1 0 3 0
+  , Linha "Sonho de Liberdade"        3 2 0 1 6 2
+  , Linha "Como Eu Era Antes de Você" 3 2 0 1 4 2
+  , Linha "Toy Story 3"               3 1 0 2 3 5
+  , Linha "Vitória"                   3 0 2 1 1 3
+  , Linha "Bastardos Inglórios"       3 0 1 2 1 6
   ]
 
 -- Três filmes com 3 pontos, 1 vitória e saldo +1. Alvorada fica em último
@@ -403,7 +403,7 @@ testesCamada1 =
   , testar "filmes sem repetição e em ordem"
       (filmes campeonato) ["Ainda Estou Aqui", "Bastardos Inglórios", "Como Eu Era Antes de Você", "Sonho de Liberdade", "Toy Story 3", "Vitória"]
   , testar "filmes de lista vazia" (filmes []) []
-  , testar "campeonato de teste com 15 campeonato" (length campeonato) 15
+  , testar "campeonato de teste com 15 partidas" (length campeonato) 15
   ]
 
 testesCamada2 :: [IO Bool]
@@ -424,9 +424,9 @@ testesCamada2 =
       (map filme (classificacao soAlfabetica)) ["Brisa", "Zênite"]
   , testar "classificação após a 3ª rodada" (classificacao (ateRodada 3 campeonato)) tabelaRodada3
   , testar "rodada 3 difere da final" (classificacao (ateRodada 3 campeonato) /= classificacao campeonato) True
-  , testar "ateRodada 0 não tem campeonato" (ateRodada 0 campeonato) []
+  , testar "ateRodada 0 não tem partidas" (ateRodada 0 campeonato) []
   , testar "maiorDiferenca" (maiorDiferenca campeonato) (Just exemplo)
-  , testar "mediaVotos (33 votos / 15 campeonato)" (mediaVotos campeonato) (Just 2.2)
+  , testar "mediaVotos (33 votos / 15 partidas)" (mediaVotos campeonato) (Just 2.2)
   , testar "maiorDiferenca [] é Nothing" (maiorDiferenca []) Nothing
   , testar "mediaVotos [] é Nothing" (mediaVotos []) Nothing
   , testar "classificacao [] é vazia" (classificacao []) []

@@ -138,7 +138,7 @@ Na ordem, inspirados no Campeonato Brasileiro:
 
 - Sonho de Liberdade, Como Eu Era Antes de Você e Toy Story 3 terminam com 9 pontos e 3 vitórias: **o saldo decide**.
 - Bastardos Inglórios passa Vitória entre a 3ª e a 5ª rodada (a tabela intermediária é diferente da final).
-- Empate em 0 x 0: Ainda Estou Aqui x Vitória (rodada 1). Vitória por 3 ou mais: Sonho de Liberdade 4 x 0 Bastardos Inglórios (rodada 1).
+- Empate em 0 x 0: Ainda Estou Aqui x Vitória (rodada 1). Vitória por 3 ou mais votos de diferença: Sonho de Liberdade 4 x 0 Bastardos Inglórios (rodada 1).
 - Média: 33 votos em 15 partidas = 2,2 votos por partida.
 
 ## Armadilhas do enunciado (seção 4) e como foram evitadas
@@ -159,7 +159,7 @@ Na ordem, inspirados no Campeonato Brasileiro:
 ## Limitações conhecidas
 
 - Títulos são comparados exatamente como escritos (após tirar espaços nas pontas):
-  `"Ainda Estou Aqui"` e `"aurora"` contam como filmes diferentes.
+  `"Ainda Estou Aqui"` e `"ainda estou aqui"` contam como filmes diferentes.
 - O `;` é o separador, então não pode fazer parte de um título.
 - A ordem alfabética usa a ordem padrão de `String` do Haskell (por código de
   caractere), então letras acentuadas maiúsculas podem não ficar onde o português
