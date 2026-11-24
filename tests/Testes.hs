@@ -122,6 +122,9 @@ testesCamada3 =
   , testar "NumeroInvalido (acima do limite de Int)" (lerVotacao 2 "1;Ainda Estou Aqui;99999999999999999999;0;Bastardos Inglórios")
       (Left (NumeroInvalido 2 "votos do filme A"))
   , testar "VotosNegativos" (lerVotacao 3 "1;Como Eu Era Antes de Você;-1;0;Bastardos Inglórios") (Left (VotosNegativos 3))
+  , testar "VotosNegativos no menor Int"
+      (lerVotacao 3 ("1;Como Eu Era Antes de Você;" ++ show (minBound :: Int) ++ ";0;Bastardos Inglórios"))
+      (Left (VotosNegativos 3))
   , testar "MesmoFilme" (lerVotacao 4 "1;Bastardos Inglórios;1;0;Bastardos Inglórios") (Left (MesmoFilme 4))
   , testar "FilmeRepetidoNaEtapa"
       (lerPremiacao (unlines ["1;Ainda Estou Aqui;2;0;Bastardos Inglórios", "1;Como Eu Era Antes de Você;1;1;Ainda Estou Aqui"]))
@@ -157,4 +160,5 @@ main = do
       falhas = length (filter not resultados)
   putStrLn ""
   putStrLn (show (length resultados - falhas) ++ "/" ++ show (length resultados) ++ " testes passaram.")
+
 

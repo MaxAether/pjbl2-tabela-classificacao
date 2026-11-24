@@ -54,7 +54,7 @@ runghc -isrc tests/Testes.hs
 ```
 
 O `-isrc` indica onde estão os módulos importados. No final dos testes, o
-resultado esperado é `50/50 testes passaram.`
+resultado esperado é `51/51 testes passaram.`
 
 ## Como compilar
 
@@ -84,7 +84,7 @@ No Windows, pelo PowerShell:
 ```
 
 O código foi conferido no GHC 9.6.6, compilando os dois programas com `-Wall`
-sem avisos e executando os 50 testes.
+sem avisos e executando os 51 testes.
 
 Se o terminal do Windows tiver problemas com os acentos, use `chcp 65001` antes
 de executar.
@@ -117,3 +117,4 @@ etapa.
 
 Para alterar os exemplos, edite `dadosPremiacao` ou `dadosComErros` em
 `src/Dados.hs`. As regras e as limitações estão em [docs/decisoes.md](docs/decisoes.md).
+

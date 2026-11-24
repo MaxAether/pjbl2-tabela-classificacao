@@ -146,7 +146,7 @@ classificação final.
 A maior diferença é de quatro votos, na votação entre Sonho de Liberdade e
 Bastardos Inglórios. Ao todo são 33 votos em 15 votações, então a média é 2,2.
 
-Os 50 testes cobrem as três camadas, incluindo lista vazia, filme sem
+Os 51 testes cobrem as três camadas, incluindo lista vazia, filme sem
 participações, critérios de desempate, todos os tipos de erro e uma entrada
 com vários erros. Na compilação com GHC 9.6.6 e `-Wall`, não houve avisos e
 todos passaram.
@@ -172,3 +172,4 @@ todos passaram.
 - A verificação de filmes repetidos percorre as participações várias vezes.
   Isso atende ao tamanho dos nossos exemplos, mas pode ficar lento com uma
   quantidade muito grande de votações.
+

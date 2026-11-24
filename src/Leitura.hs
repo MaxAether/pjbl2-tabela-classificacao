@@ -43,8 +43,9 @@ lerNumero numLinha campo texto =
   where
     caberEmInt :: Integer -> Maybe Int
     caberEmInt n
-      | abs n <= toInteger (maxBound :: Int) = Just (fromInteger n)
-      | otherwise                            = Nothing
+      | n >= toInteger (minBound :: Int)
+          && n <= toInteger (maxBound :: Int) = Just (fromInteger n)
+      | otherwise = Nothing
 
 -- Bloco do na mônada Either: o primeiro Left interrompe a leitura.
 lerVotacao :: Int -> String -> Either Erro Votacao
@@ -144,4 +145,5 @@ tabelaFormatada linhas = unlines (map (intercalate " | ") (cabecalho : corpo))
 
     espacos :: Int -> String -> String
     espacos n s = replicate (n - length s) ' '
+
 
