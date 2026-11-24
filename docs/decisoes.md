@@ -1,182 +1,174 @@
 # Decisões de modelagem
 
-## O campeonato
+## 1. Escolha do tema
 
-Competição fictícia inspirada no Oscar: seis filmes, cinco rodadas, cada filme
-enfrenta todos os outros uma vez (15 partidas, nenhum filme joga duas vezes na
-mesma rodada). Em cada partida o júri vota; quem tem mais votos vence.
-Vitória vale 3 pontos, empate 1 e derrota 0.
+A gente escolheu uma premiação fictícia de filmes inspirada no Oscar para
+adaptar a proposta do trabalho. No nosso exemplo, seis filmes participam de
+cinco etapas. Cada votação compara dois filmes pelos votos recebidos do júri,
+e cada par de filmes é avaliado uma vez.
 
-### Correspondência com o enunciado
+São quinze votações ao todo, sem repetir um filme na mesma etapa. Os votos
+foram definidos para os testes, incluindo um empate sem votos e uma diferença
+de quatro votos. Não estamos reproduzindo o funcionamento do Oscar real.
 
-O enunciado permite trocar o esporte, desde que a quantidade e a relação das
-funções se mantenham. Os nomes que mudaram foram só os que citam futebol:
+Para deixar o código mais próximo do tema, usamos estes nomes:
 
-| Enunciado (futebol) | Este projeto |
+| Na proposta original | No nosso projeto |
 | --- | --- |
-| `type Time = String` | `type Filme = String` |
-| `mandante`, `visitante` | `filmeA`, `filmeB` |
-| `golsMandante`, `golsVisitante` | `votosA`, `votosB` |
-| gols pró / gols contra (`Linha`) | `votosPro` / `votosContra` |
-| `times` | `filmes` |
+| `Time` | `Filme` |
+| `Partida` | `Votacao` |
+| `rodada` | `etapa` |
+| `mandante` e `visitante` | `filmeA` e `filmeB` |
+| Gols | Votos |
+| `jogos` | `participacoes` |
 | `linhaDoTime` | `linhaDoFilme` |
+| `ateRodada` | `ateEtapa` |
 | `maiorGoleada` | `maiorDiferenca` |
 | `mediaGols` | `mediaVotos` |
-| `MesmoTime`, `TimeRepetidoNaRodada` | `MesmoFilme`, `FilmeRepetidoNaRodada` |
+| `lerPartida` e `lerCampeonato` | `lerVotacao` e `lerPremiacao` |
 
-Todos os outros nomes (`Partida`, `Resultado`, `Linha`, `participou`,
-`resultadoPara`, `pontos`, `pontosLinha`, `saldo`, `aproveitamento`,
-`classificacao`, `ateRodada`, `Erro`, `separar`, `lerPartida`, `lerCampeonato`,
-`todosOsErros`, `tabelaFormatada`, `main`) são os do enunciado.
+## 2. Como guardamos os dados
 
-### Critérios de classificação
+`Filme` é uma `String` com o título. O tipo `Resultado` tem três possibilidades:
+`Vitoria`, `Empate` e `Derrota`. Assim, o resultado não depende de escrever uma
+palavra ou uma letra do jeito certo.
 
-Na ordem, inspirados no Campeonato Brasileiro:
+`Votacao` guarda a etapa, os dois filmes e os votos de cada um. Usamos campos
+com nomes para deixar claro a quem cada informação pertence.
 
-1. pontos (maior primeiro);
-2. número de vitórias;
-3. saldo de votos (votos pró − votos contra);
-4. votos pró;
-5. ordem alfabética do título (garante uma ordem total, sem sorteio).
+`Linha` reúne as participações, vitórias, empates, derrotas, votos a favor e
+votos contra de um filme. Os pontos e o saldo são calculados a partir desses
+valores, sem guardar a mesma informação duas vezes. Os votos contra são os
+votos recebidos pelos outros filmes nas votações em que aquele filme participou.
 
-## Camada 1: tipos
+Quando um filme não participou de uma votação, `resultadoPara` devolve
+`Nothing`. Achamos melhor representar a ausência de resultado do que atribuir
+uma derrota a quem nem estava naquela votação.
 
-- **`Partida` e `Linha` são records**, não tuplas. Com `(Int, String, Int, Int, String)`
-  seria fácil trocar `votosA` com `votosB` sem o compilador perceber; com nomes de
-  campo isso não acontece.
-- **`Resultado` é um tipo soma** (`Vitoria | Empate | Derrota`), não `String` nem `Int`.
-  Um `"v"` minúsculo não compila como `Resultado`, e o `-Wall` avisa se algum caso
-  ficar sem tratamento (por exemplo, em `pontos`).
-- `resultadoPara` devolve `Maybe Resultado`: `Nothing` quando o filme não jogou,
-  em vez de um valor inventado. Usa `compare` + `case` sobre `Ordering` (Aula 12).
-- `Linha` guarda só contagens (jogos, V, E, D, votos pró e contra). Pontos e saldo
-  são **derivados** (`pontosLinha`, `saldo`), assim nunca ficam inconsistentes com
-  as contagens.
+## 3. Pontuação e classificação
 
-## Camada 2: classificação
+Mantivemos a pontuação da proposta: 3 pontos por vitória, 1 por empate e 0 por
+derrota. Para ordenar os filmes, usamos estes critérios:
 
-- **Sem recursão explícita.** Usamos `map` (linhas de cada filme), `filter`
-  (`ateRodada` e as partidas de um filme), dobra (`foldl'`) e composição `(.)`
-  (`(<= limite) . rodada`, `Down . pontosLinha`).
-- **`linhaDoFilme` usa `foldl'`.** A linha é um acumulador que começa zerado e é
-  atualizado partida a partida, na ordem cronológica, igual ao `saldoFinal` do
-  extrato (Aula 11): o acumulado vem primeiro em `somar linha partida`. Escolhemos
-  `foldl'` (e não `foldr`) porque o resultado é um valor acumulado, não uma lista;
-  e `foldl'` em vez de `foldl` porque calcula o acumulador a cada passo, sem guardar
-  contas pendentes (regra prática da Aula 12).
-  Ele é importado qualificado (`import qualified Data.List as L`, aula 12) e usado
-  como `L.foldl'`: do GHC 9.10 em diante o `foldl'` já vem no Prelude, e o import
-  comum geraria um aviso no `-Wall`. Assim o código compila sem aviso tanto nas
-  versões antigas quanto nas novas do playground.
-- **Ordenação com uma única comparação**: `sortBy` com `comparing` combinado por
-  `<>` (`Ordering` é um Monoid) e `Down` para ordem decrescente. Nada de vários
-  `sortBy` encadeados nem ordenação escrita à mão.
-- **`aproveitamento`** usa `fromIntegral` para converter os `Int` em `Double` antes
-  de dividir com `/` (com `div` o resultado seria truncado). Devolve 0 se não houve jogos.
-- **Funções totais**: `maiorDiferenca` é um `foldl'` que começa em `Nothing`
-  (sem `maximum`, `head` ou `foldr1`, que quebram em lista vazia); `mediaVotos`
-  trata `[]` com `Nothing`. Se duas partidas têm a mesma diferença máxima, fica a
-  primeira da lista.
+1. Mais pontos.
+2. Mais vitórias.
+3. Maior saldo de votos, calculado por votos a favor menos votos contra.
+4. Mais votos a favor.
+5. Ordem alfabética do título.
 
-## Camada 3: leitura e validação
+O último critério garante uma ordem definida mesmo quando todos os números
+empatam. São regras da nossa premiação fictícia.
 
-- **`separar`** é um `foldr`: começa com um campo vazio e cada separador abre um
-  campo novo. `"1;A;;B"` vira `["1","A","","B"]` (campos vazios são preservados,
-  para que a contagem de campos detecte erros).
-- **`readMaybe`, nunca `read`.** `"dois"` ou `"2a"` viram `Nothing` em vez de
-  derrubar o programa. O valor é lido como `Integer` e `>>=` (Maybe como mônada)
-  recusa números que não cabem em `Int`, porque `readMaybe` direto para `Int` daria
-  a volta silenciosamente (`99999999999999999999` viraria outro número). O
-  `Nothing` vira um `Left` com motivo pela função `paraEither`, como na aula 14.
-- **`lerPartida` usa `do` na mônada Either**: ler rodada, votos A, votos B e validar.
-  O primeiro `Left` interrompe a sequência, sem `case` aninhados ("escadinha").
-- **`lerCampeonato`** é outro `do` em Either: `traverse` aplica `lerPartida` a todas
-  as linhas e para no primeiro erro; depois `verificarRodadas` confere os conflitos.
-- **`todosOsErros`** lê todas as linhas e usa list comprehension com padrão no
-  gerador: `[erro | Left erro <- lidas]` junta os erros de cada linha e
-  `[p | Right p <- lidas]` separa as partidas válidas para conferir as rodadas.
-- Os conflitos de rodada são calculados com uma **list comprehension** (Aula 12):
-  cada par `(rodada, filme)` que aparece mais de uma vez gera um erro.
-- O número da linha nos erros é o **número real no texto**, contando comentários
-  e linhas em branco, para o usuário achar a linha no arquivo.
-- **Núcleo puro e casca de IO separados**: só o `main` faz IO; tudo o mais pode ser
-  testado sem entrada pelo teclado.
+## 4. Organização e cálculos
 
-### Erros e o que cada um carrega
+Separamos o código nas três camadas pedidas. `Tipos.hs` define os dados,
+`Classificacao.hs` faz os cálculos e `Leitura.hs` cuida da entrada e da
+formatação. Os exemplos ficam em `Dados.hs`, e `Main.hs` reúne a demonstração.
+Os testes ficam em uma pasta própria e importam esses mesmos módulos.
 
-| Construtor | Carrega | Exemplo |
-| --- | --- | --- |
-| `CamposInvalidos` | linha | `1;Ainda Estou Aqui;0;Bastardos Inglórios` (4 campos) ou título vazio |
-| `NumeroInvalido` | linha e campo | `dois`, `2a`, rodada `0` |
-| `PlacarNegativo` | linha | `1;Como Eu Era Antes de Você;-2;1;Bastardos Inglórios` |
-| `MesmoFilme` | linha | `2;Sonho de Liberdade;1;1;Sonho de Liberdade` |
-| `FilmeRepetidoNaRodada` | rodada e filme | Ainda Estou Aqui em duas partidas da rodada 3 |
+Para montar a linha de cada filme, filtramos suas votações e usamos `foldl'`
+para acumular as estatísticas, começando com tudo zerado. `map` monta as linhas
+dos filmes, e `filter` também permite selecionar as votações até uma etapa.
+Essa parte não usa recursão explícita.
 
-## Tabelas conferidas à mão
+A classificação usa `sortBy`, com os critérios reunidos em uma comparação.
+`Down` coloca os maiores valores primeiro, e `<>` passa ao próximo critério
+quando há empate. Usamos a ordenação da biblioteca em vez de criar outra.
 
-### Após a 3ª rodada
+O aproveitamento é a porcentagem dos pontos possíveis que o filme conseguiu.
+Usamos `fromIntegral` antes da divisão para obter um resultado com casas
+decimais. Se o filme não participou, o aproveitamento é zero.
 
-| Pos. | Filme | Pts | J | V | E | D | Pró | Contra | Saldo |
+`maiorDiferenca` e `mediaVotos` devolvem `Nothing` quando a lista está vazia.
+Assim, não precisamos buscar um elemento que não existe.
+
+## 5. Leitura e tratamento dos erros
+
+Os exemplos ficam como texto no código, com os campos separados por `;`.
+Isso permite testar tanto dados corretos quanto linhas com erros, sem pedir
+entrada pelo teclado.
+
+Usamos `readMaybe` para ler os números. Se aparecer algo como `dois` ou `2a`,
+a leitura informa o erro. Antes de converter para `Int`, também conferimos
+se o número cabe nesse tipo.
+
+`lerVotacao` usa um bloco `do` com `Either` para ler os campos e validar a
+votação. `lerPremiacao` usa `traverse` para aplicar essa leitura ao texto e
+depois verifica os filmes repetidos em uma etapa. Um `Left` traz o motivo da
+falha; um `Right` traz os dados aceitos.
+
+| Erro | O que significa |
+| --- | --- |
+| `CamposInvalidos` | A linha não tem cinco campos ou um dos títulos está vazio |
+| `NumeroInvalido` | Um campo numérico é inválido, não cabe em `Int` ou a etapa não é positiva |
+| `VotosNegativos` | Um dos filmes recebeu uma quantidade negativa de votos |
+| `MesmoFilme` | O mesmo título aparece nas duas opções da votação |
+| `FilmeRepetidoNaEtapa` | Um filme aparece em mais de uma votação na mesma etapa |
+
+As mensagens indicam a linha original do texto ou a etapa do conflito.
+`lerPremiacao` retorna o primeiro erro de leitura; se as linhas estiverem
+corretas, verifica os conflitos entre elas. `todosOsErros` reúne os erros de
+cada linha e os conflitos entre as votações válidas.
+
+## 6. Resultados esperados e testes
+
+Os testes comparam o resultado obtido com um valor esperado. Mantivemos os
+valores das tabelas escritos nos testes, separados do cálculo da classificação,
+para que a comparação não dependa de repetir a mesma função.
+
+### Depois da terceira etapa
+
+| Pos. | Filme | Pontos | Participações | V | E | D | Votos a favor | Votos contra | Saldo |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | Ainda Estou Aqui | 7 | 3 | 2 | 1 | 0 | 3 | 0 | +3 |
 | 2 | Sonho de Liberdade | 6 | 3 | 2 | 0 | 1 | 6 | 2 | +4 |
 | 3 | Como Eu Era Antes de Você | 6 | 3 | 2 | 0 | 1 | 4 | 2 | +2 |
-| 4 | Toy Story 3 | 3 | 3 | 1 | 0 | 2 | 3 | 5 | −2 |
-| 5 | Vitória | 2 | 3 | 0 | 2 | 1 | 1 | 3 | −2 |
-| 6 | Bastardos Inglórios | 1 | 3 | 0 | 1 | 2 | 1 | 6 | −5 |
+| 4 | Toy Story 3 | 3 | 3 | 1 | 0 | 2 | 3 | 5 | -2 |
+| 5 | Vitória | 2 | 3 | 0 | 2 | 1 | 1 | 3 | -2 |
+| 6 | Bastardos Inglórios | 1 | 3 | 0 | 1 | 2 | 1 | 6 | -5 |
 
 ### Classificação final
 
-| Pos. | Filme | Pts | J | V | E | D | Pró | Contra | Saldo |
+| Pos. | Filme | Pontos | Participações | V | E | D | Votos a favor | Votos contra | Saldo |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | Ainda Estou Aqui | 10 | 5 | 3 | 1 | 1 | 6 | 3 | +3 |
 | 2 | Sonho de Liberdade | 9 | 5 | 3 | 0 | 2 | 10 | 4 | +6 |
 | 3 | Como Eu Era Antes de Você | 9 | 5 | 3 | 0 | 2 | 6 | 4 | +2 |
 | 4 | Toy Story 3 | 9 | 5 | 3 | 0 | 2 | 7 | 6 | +1 |
-| 5 | Bastardos Inglórios | 4 | 5 | 1 | 1 | 3 | 3 | 8 | −5 |
-| 6 | Vitória | 2 | 5 | 0 | 2 | 3 | 1 | 8 | −7 |
+| 5 | Bastardos Inglórios | 4 | 5 | 1 | 1 | 3 | 3 | 8 | -5 |
+| 6 | Vitória | 2 | 5 | 0 | 2 | 3 | 1 | 8 | -7 |
 
-- Sonho de Liberdade, Como Eu Era Antes de Você e Toy Story 3 terminam com 9 pontos e 3 vitórias: **o saldo decide**.
-- Bastardos Inglórios passa Vitória entre a 3ª e a 5ª rodada (a tabela intermediária é diferente da final).
-- Empate em 0 x 0: Ainda Estou Aqui x Vitória (rodada 1). Vitória por 3 ou mais votos de diferença: Sonho de Liberdade 4 x 0 Bastardos Inglórios (rodada 1).
-- Média: 33 votos em 15 partidas = 2,2 votos por partida.
+Sonho de Liberdade, Como Eu Era Antes de Você e Toy Story 3 terminam com
+9 pontos e 3 vitórias. O saldo decide a ordem entre eles: +6, +2 e +1.
+A posição de Bastardos Inglórios e Vitória muda entre a terceira etapa e a
+classificação final.
 
-## Armadilhas do enunciado (seção 4) e como foram evitadas
+A maior diferença é de quatro votos, na votação entre Sonho de Liberdade e
+Bastardos Inglórios. Ao todo são 33 votos em 15 votações, então a média é 2,2.
 
-| Armadilha | Como o projeto evita | Onde |
-| --- | --- | --- |
-| Partida como tupla | `Partida` é um record com campos nomeados | Camada 1 |
-| Resultado como `String` ou `Int` | `Resultado` é um tipo soma; `-Wall` confere os casos | Camada 1, `pontos` |
-| `head`, `maximum`, `foldr1` em lista vazia | `maiorDiferenca` dobra a partir de `Nothing`; `mediaVotos [] = Nothing`; a largura da tabela usa `foldr max` com valor inicial | Camadas 2 e 3 |
-| Aproveitamento com `div` ou `/` entre `Int` | `fromIntegral` nos dois lados antes de `/` | `aproveitamento` |
-| Ordenar só por pontos ou encadear `sortBy` | um único `sortBy` com `comparing ... <> ...` e `Down` | `classificacao` |
-| Recursão explícita onde `map`/`filter`/dobra resolvem | Camada 2 sem recursão; `separar` com `foldr`; conflitos com list comprehension | Camadas 2 e 3 |
-| `read` no placar | `readMaybe`, com `Integer` + `>>=` para recusar números fora do `Int` | `lerNumero` |
-| `case` aninhados sobre `Either` | `do` na mônada Either em `lerPartida` e `lerCampeonato` | Camada 3 |
-| `getLine` no `main` | dados como `String` na seção de dados; núcleo puro, IO só no `main` | Dados e Main |
-| Campeonato vazio | tabela "Nenhuma partida registrada.", estatísticas com `Nothing`, demonstrado no `main` e testado | `main`, `Testes.hs` |
+Os 50 testes cobrem as três camadas, incluindo lista vazia, filme sem
+participações, critérios de desempate, todos os tipos de erro e uma entrada
+com vários erros. Na compilação com GHC 9.6.6 e `-Wall`, não houve avisos e
+todos passaram.
 
-## Limitações conhecidas
+## 7. Limitações conhecidas
 
-- Títulos são comparados exatamente como escritos (após tirar espaços nas pontas):
-  `"Ainda Estou Aqui"` e `"ainda estou aqui"` contam como filmes diferentes.
-- O `;` é o separador, então não pode fazer parte de um título.
-- A ordem alfabética usa a ordem padrão de `String` do Haskell (por código de
-  caractere), então letras acentuadas maiúsculas podem não ficar onde o português
-  esperaria.
-- `lerCampeonato` primeiro lê todas as linhas e só depois confere as rodadas. Se o
-  texto tiver um erro de digitação e um conflito de rodada, o erro de digitação é
-  relatado primeiro, mesmo que esteja numa linha posterior. `todosOsErros` lista os
-  dois.
-- Rodadas incompletas são aceitas: o programa não exige que todos joguem em todas
-  as rodadas.
-- Não há empate de critérios "por sorteio": a ordem alfabética sempre decide no fim.
-- `conflitos` compara cada escalação com todas as outras (custo quadrático), o que
-  é irrelevante para um campeonato, mas não escalaria para milhões de partidas.
-- O ambiente escolhido é o Haskell Playground, que só aceita um arquivo. Por isso
-  `Testes.hs` repete as seções do `Main.hs` (sem nenhuma mudança) antes dos testes:
-  assim ele pode ser colado e rodado sozinho. Se uma função mudar no `Main.hs`, a
-  cópia em `Testes.hs` precisa ser atualizada também.
-- No GHC local (opcional), num terminal que não usa UTF-8 (como o `cmd` do Windows
-  sem `chcp 65001`), imprimir os acentos encerra o programa com
-  `commitBuffer: invalid argument`. No playground isso não acontece.
+- Os dados são fictícios e ficam em `Dados.hs`. Não há cadastro durante a
+  execução nem consulta a resultados reais.
+- Títulos são comparados como foram escritos, depois de remover espaços nas
+  pontas. Diferenças de maiúsculas, minúsculas ou acentos podem representar
+  filmes diferentes.
+- Um título não pode conter `;`, pois esse caractere separa os campos.
+- A ordem alfabética segue a comparação padrão de texto do Haskell, que pode
+  diferir da ordem esperada em português para letras acentuadas.
+- Etapas incompletas são aceitas. O programa não exige que todos os filmes
+  participem de todas as etapas nem que cada par apareça uma única vez ao longo
+  de toda a premiação.
+- Se duas votações tiverem a mesma maior diferença, fica a primeira da lista.
+- `todosOsErros` procura conflitos apenas nas votações que puderam ser lidas
+  corretamente. Uma linha inválida não entra nessa verificação.
+- Os valores individuais são conferidos, mas os totais também usam `Int`.
+  Somar valores muito grandes ainda pode ultrapassar o limite desse tipo.
+- A verificação de filmes repetidos percorre as participações várias vezes.
+  Isso atende ao tamanho dos nossos exemplos, mas pode ficar lento com uma
+  quantidade muito grande de votações.

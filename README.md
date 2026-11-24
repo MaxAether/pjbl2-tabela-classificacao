@@ -2,65 +2,118 @@
 
 Trabalho de Programação Lógica e Funcional.
 
-A gente escolheu fazer um "campeonato" de filmes inspirado no Oscar. São seis
-filmes, cinco rodadas, e cada filme enfrenta todos os outros uma vez. Em cada
-partida o júri vota, e o filme com mais votos ganha. Vitória vale 3 pontos,
-empate vale 1 e derrota vale 0, igual no futebol.
+A gente escolheu adaptar a proposta para uma premiação fictícia de filmes,
+inspirada no Oscar. São seis filmes, cinco etapas e quinze votações. Em cada
+votação, o júri compara dois filmes e o que recebe mais votos vence.
+
+Vitória vale 3 pontos, empate vale 1 e derrota vale 0. A classificação considera
+pontos, vitórias, saldo de votos, votos a favor e, por último, a ordem alfabética.
+Os resultados são inventados para testar o programa; não são as regras nem os
+resultados do Oscar real.
 
 ## Integrantes
 
 - Richard M. V. Ludke
 - Carolina Reis
 
-## Onde roda
+## Organização do projeto
 
-Usamos o Haskell Playground (https://play.haskell.org). Como ele só aceita um
-arquivo, o código ficou todo no `Main.hs`, separado em seções com comentários na
-mesma ordem dos módulos do enunciado: Camada 1, Camada 2, Camada 3, Dados e Main.
+Os arquivos estão separados por camada. A raiz do repositório é a pasta do
+projeto.
 
-## Como rodar
+| Arquivo | O que tem nele |
+| --- | --- |
+| `src/Tipos.hs` | Camada 1: tipos e consultas básicas sobre os filmes e as votações |
+| `src/Classificacao.hs` | Camada 2: pontuação, classificação e estatísticas com funções de ordem superior |
+| `src/Leitura.hs` | Camada 3: leitura, validação com `Maybe` e `Either` e formatação da tabela |
+| `src/Dados.hs` | Dados da premiação e uma entrada com erros, guardados como `String` |
+| `src/Main.hs` | Demonstração das três camadas |
+| `tests/Testes.hs` | Testes que comparam os resultados com os valores esperados |
+| `docs/decisoes.md` | Decisões de modelagem, tabelas esperadas e limitações conhecidas |
+| `README.md` | Instruções para compilar e executar |
 
-1. Entrar em https://play.haskell.org
-2. Apagar o código de exemplo que aparece lá
-3. Colar o `Main.hs` inteiro e clicar em Run
+Os testes importam os módulos de `src/`, então não precisam repetir o código do
+programa.
 
-Para rodar os testes é o mesmo processo com o `Testes.hs`. No final tem que
-aparecer `50/50 testes passaram.`
+## Como executar
 
-O `Testes.hs` tem uma cópia das seções do `Main.hs` antes dos testes, porque o
-playground não consegue importar outro arquivo.
+Esta versão usa o GHC instalado no computador. Ela depende apenas da biblioteca
+padrão do Haskell (`base`), sem pacotes adicionais. Como agora há vários módulos,
+não basta colar apenas o `Main.hs` no Playground.
 
-A primeira linha dos dois arquivos é `{-# OPTIONS_GHC -Wall #-}`, que liga todos
-os avisos do compilador. Os dois compilam sem nenhum aviso.
+Abra o terminal na raiz do projeto, onde está este README, e execute:
 
-Se quiser rodar no GHC instalado no computador também funciona:
-`runghc Main.hs` e `runghc Testes.hs`.
+```sh
+runghc -isrc src/Main.hs
+```
 
-## O que aparece quando roda
+Para rodar os testes:
 
-1. A tabela final do campeonato
-2. A tabela depois da 3ª rodada
-3. As estatísticas (maior diferença de votos, média de votos por partida e
-   aproveitamento de cada filme)
-4. Um exemplo de entrada com erros, mostrando primeiro só o primeiro erro e
-   depois a lista com todos
-5. O campeonato vazio, pra mostrar que o programa não quebra
+```sh
+runghc -isrc tests/Testes.hs
+```
+
+O `-isrc` indica onde estão os módulos importados. No final dos testes, o
+resultado esperado é `50/50 testes passaram.`
+
+## Como compilar
+
+Para gerar os executáveis:
+
+```sh
+ghc -Wall -isrc -outputdir build/app src/Main.hs -o oscar
+ghc -Wall -isrc -outputdir build/tests tests/Testes.hs -o testes
+```
+
+Os arquivos gerados pela compilação ficam em `build/`, e os executáveis ficam na
+raiz. As pastas de compilação são separadas porque o programa e os testes têm
+seus próprios `main`.
+
+No Linux ou macOS, execute:
+
+```sh
+./oscar
+./testes
+```
+
+No Windows, pelo PowerShell:
+
+```powershell
+.\oscar.exe
+.\testes.exe
+```
+
+O código foi conferido no GHC 9.6.6, compilando os dois programas com `-Wall`
+sem avisos e executando os 50 testes.
+
+Se o terminal do Windows tiver problemas com os acentos, use `chcp 65001` antes
+de executar.
+
+## O que aparece na execução
+
+1. A classificação final da premiação.
+2. A classificação depois da terceira etapa.
+3. A maior diferença de votos, a média de votos por votação e o aproveitamento
+   de cada filme.
+4. Uma entrada com erros, mostrando o primeiro erro e depois a lista completa.
+5. O resultado de uma premiação vazia.
+
+Na tabela, `Par` significa participações, `V` vitórias, `E` empates e `D` derrotas.
 
 ## Formato dos dados
 
-Cada linha é uma partida, com os campos separados por ponto e vírgula:
+Cada linha representa uma votação, com cinco campos separados por ponto e
+vírgula:
 
-```
-# rodada;filme A;votos A;votos B;filme B
+```text
+# etapa;filme A;votos A;votos B;filme B
 1;Ainda Estou Aqui;0;0;Vitória
 1;Como Eu Era Antes de Você;2;1;Toy Story 3
 ```
 
-Linhas em branco e linhas que começam com `#` são ignoradas.
+Linhas vazias e comentários iniciados por `#` são ignorados. O programa verifica
+os números, os títulos, os votos negativos e a repetição de um filme na mesma
+etapa.
 
-## Arquivos
-
-- `Main.hs`: o programa inteiro
-- `Testes.hs`: os testes, cada um compara o resultado com o valor esperado
-- `docs/decisoes.md`: por que modelamos do jeito que modelamos, as tabelas que
-  conferimos à mão e as limitações que conhecemos
+Para alterar os exemplos, edite `dadosPremiacao` ou `dadosComErros` em
+`src/Dados.hs`. As regras e as limitações estão em [docs/decisoes.md](docs/decisoes.md).
